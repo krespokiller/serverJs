@@ -76,7 +76,7 @@ describe('Authentication Services', () => {
       expect(result).toEqual(token);
       expect(findUserByEmail).toHaveBeenCalledWith(email);
       expect(bcrypt.compare).toHaveBeenCalledWith(password, user.password);
-      expect(jwt.sign).toHaveBeenCalledWith({ email: user.email }, 'secretKey');
+      expect(jwt.sign).toHaveBeenCalledWith({ email: user.email }, undefined,{"expiresIn": "7d"});
     });
 
     it('should throw an error if user is not found', async () => {
