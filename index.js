@@ -1,20 +1,6 @@
 import prisma from './prisma/db.js'
-import express from 'express'
-import swaggerUi from 'swagger-ui-express'
-import swaggerSpec from './swaggerConfig.js' // Permite a Express interpretar JSON en las solicitudes
-
-// Rutas
-// import authRoutes from './routes/authRoutes.js'
-
-const app = express()
+import { app } from './app.js'
 const PORT = process.env.PORT || 3000
-
-// Middlewares
-app.use(express.json())
-// app.use('/auth', authRoutes)
-
-// Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // Iniciar el servidor
 app.listen(PORT, async () => {

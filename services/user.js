@@ -1,4 +1,5 @@
-import prisma from '../../prisma/db'
+import prisma from '../prisma/db.js'
+
 export const createUser = async (email, hashedPassword) => {
   return await prisma.user.create({
     data: {
@@ -16,12 +17,12 @@ export const findUserByEmail = async (email) => {
   })
 }
 
-export const updateUserByEmail = async (email, newData) => {
+export const updateUserByEmail = async (email, data) => {
   return await prisma.user.update({
     where: {
       email
     },
-    data: newData
+    data: data
   })
 }
 

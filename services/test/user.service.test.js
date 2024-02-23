@@ -1,4 +1,4 @@
-import { createUser, findUserByEmail, updateUserByEmail, deleteUserByEmail } from '../users.js'
+import { createUser, findUserByEmail, updateUserByEmail, deleteUserByEmail } from '../index'
 import { PrismaClient } from '@prisma/client'
 
 // Connect to the test database
@@ -33,6 +33,7 @@ afterAll(async () => {
   // Disconnect Prisma Client
   await prisma.$disconnect();
 });
+
 describe('User Database Functions', () => {
   describe('createUser', () => {
     it('should create a new user', async () => {

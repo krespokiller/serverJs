@@ -1,16 +1,32 @@
 import { singUp, logIn } from '../auth';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { createUser } from '../../users/users';
+import { createUser, findUserByEmail } from '../user';
 import { PrismaClient } from '@prisma/client'
 
 // Connect to the test database
 export const prisma = new PrismaClient();
 
 // Mocks
-jest.mock('bcryptjs');
 jest.mock('jsonwebtoken');
-jest.mock('../../users/users')
+
+jest.mock('bcryptjs', () => {
+  const mockhash = jest.fn(() => { return '123TH1SISSUPOSEDTOBEAHASH123' });
+  return {
+    hash: mockhash,
+    compare: jest.fn((value1,value2)=>value1==='password123'&&value2==='123TH1SISSUPOSEDTOBEAHASH123')
+  };
+});
+
+
+jest.mock('../user',() => {
+  const mockedUser = { id: 1, email: 'test@example.com', password: '123TH1SISSUPOSEDTOBEAHASH123' };
+  return {
+    createUser: jest.fn(()=>mockedUser),
+    findUserByEmail: jest.fn(()=>mockedUser)
+  };
+})
+
 jest.mock('@prisma/client', () => {
   const mockUserFindUnique = jest.fn();
 
@@ -26,16 +42,20 @@ jest.mock('@prisma/client', () => {
 });
 
 describe('Authentication Services', () => {
+  beforeEach(()=>{
+    jest.clearAllMocks()
+  })
   describe('singUp', () => {
     it('should create a new user with hashed password', async () => {
       const email = 'test@example.com';
       const password = 'password123';
-      const hashedPassword = 'hashedPassword123';
-
-      bcrypt.hash.mockResolvedValue(hashedPassword);
-      await singUp(email, password);
-
-      expect(createUser).toHaveBeenCalledWith({email: "test@example.com", password: "hashedPassword123"});
+      // Call the singUp function with the email and password
+      const user = await singUp(email, password);
+  
+      // Assert that createUser was called with the correct arguments
+      expect(createUser).toHaveBeenCalledWith({ email: email, password: '123TH1SISSUPOSEDTOBEAHASH123' });
+      // Assert that the singUp function returned the mocked user object
+      expect(user).toEqual({ id: 1, email: email, password: '123TH1SISSUPOSEDTOBEAHASH123' });
     });
   });
 
@@ -45,28 +65,25 @@ describe('Authentication Services', () => {
       const password = 'password123';
       const user = {
         email,
-        password: 'hashedPassword123', // Assuming this is the hashed password stored in the database
-        username: 'testuser'
+        password: '123TH1SISSUPOSEDTOBEAHASH123',
       };
       const token = 'generatedToken';
 
-      prisma.user.findUnique.mockResolvedValue(user);
-      bcrypt.compare.mockResolvedValue(true);
       jwt.sign.mockReturnValue(token);
 
       const result = await logIn(email, password);
 
       expect(result).toEqual(token);
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { email } });
+      expect(findUserByEmail).toHaveBeenCalledWith(email);
       expect(bcrypt.compare).toHaveBeenCalledWith(password, user.password);
-      expect(jwt.sign).toHaveBeenCalledWith({ username: user.username }, 'secretKey');
+      expect(jwt.sign).toHaveBeenCalledWith({ email: user.email }, 'secretKey');
     });
 
     it('should throw an error if user is not found', async () => {
       const email = 'nonexistent@example.com';
       const password = 'password123';
 
-      prisma.user.findUnique.mockResolvedValue(null);
+      findUserByEmail.mockResolvedValue(null);
 
       await expect(logIn(email, password)).rejects.toThrow('No se encontró el usuario');
     });
@@ -76,10 +93,9 @@ describe('Authentication Services', () => {
       const password = 'wrongPassword';
       const user = {
         email,
-        password: 'hashedPassword123', // Assuming this is the hashed password stored in the database
+        password: '123TH1SISSUPOSEDTOBEAHASH123',
       };
-
-      prisma.user.findUnique.mockResolvedValue(user);
+      findUserByEmail.mockResolvedValue(user);
       bcrypt.compare.mockResolvedValue(false);
 
       await expect(logIn(email, password)).rejects.toThrow('Credenciales incorrectas');
