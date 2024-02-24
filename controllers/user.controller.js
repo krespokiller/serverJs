@@ -1,4 +1,9 @@
-import { createUser, findUserByEmail, updateUserByEmail, deleteUserByEmail } from '../services/index.js'
+import { 
+  createUser, 
+  findUserByEmail, 
+  updateUserByEmail, 
+  deleteUserByEmail 
+} from '../services/index.js'
 
 export const createUserController = async (req, res) => {
   try {
