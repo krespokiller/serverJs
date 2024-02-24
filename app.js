@@ -6,7 +6,8 @@ import swaggerSpec from './swaggerConfig.js'
 // Rutas
 import { 
     userRouter, 
-    authRouter 
+    authRouter,
+    productRouter
 } from './routes/index.js'
 
 export const app = express()
@@ -17,5 +18,6 @@ app.use(express.json())
 //Routes
 app.use('/user', userRouter)
 app.use('/auth', authRouter)
+app.use('/product', productRouter)
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

@@ -80,7 +80,7 @@ import {
           const userId = 1;
           const mockProducts = [mockProduct, mockProduct]; // Mocked array of products
           findAllProductsByUser.mockResolvedValue(mockProducts);
-          const req = mockRequest({}, { userId });
+          const req = mockRequest({userId});
           const res = mockResponse();
       
           await findAllProductsByUserController(req, res);
@@ -92,7 +92,7 @@ import {
         it('should handle error when finding products by user', async () => {
           const userId = 1;
           findAllProductsByUser.mockRejectedValue(mockError);
-          const req = mockRequest({}, { userId });
+          const req = mockRequest({userId});
           const res = mockResponse();
       
           await findAllProductsByUserController(req, res);
@@ -131,7 +131,7 @@ import {
         it('should find a product by ID successfully', async () => {
           const productId = 1;
           findProductById.mockResolvedValue(mockProduct);
-          const req = mockRequest({}, { productId });
+          const req = mockRequest({productId});
           const res = mockResponse();
       
           await findProductByIdController(req, res);
@@ -143,7 +143,7 @@ import {
         it('should handle error when finding a product by ID', async () => {
           const productId = 1;
           findProductById.mockRejectedValue(mockError);
-          const req = mockRequest({}, { productId });
+          const req = mockRequest({productId});
           const res = mockResponse();
       
           await findProductByIdController(req, res);
@@ -155,7 +155,7 @@ import {
         it('should handle not found case', async () => {
           const productId = 1;
           findProductById.mockResolvedValue(null); // Product not found
-          const req = mockRequest({}, { productId });
+          const req = mockRequest({productId});
           const res = mockResponse();
       
           await findProductByIdController(req, res);
@@ -170,7 +170,7 @@ import {
           const productId = 1;
           const updatedProduct = { ...mockProduct, name: 'Updated Name' };
           updateProduct.mockResolvedValue(updatedProduct);
-          const req = mockRequest({ name: 'Updated Name', price: 10.99 }, { productId });
+          const req = mockRequest({ name: 'Updated Name', price: 10.99, productId });
           const res = mockResponse();
       
           await updateProductController(req, res);
@@ -182,7 +182,7 @@ import {
         it('should handle error when updating a product', async () => {
           const productId = 1;
           updateProduct.mockRejectedValue(mockError);
-          const req = mockRequest({ name: 'Updated Name', price: 10.99 }, { productId });
+          const req = mockRequest({ name: 'Updated Name', price: 10.99, productId});
           const res = mockResponse();
       
           await updateProductController(req, res);
@@ -196,7 +196,7 @@ import {
         it('should delete a product successfully', async () => {
           const productId = 1;
           deleteProduct.mockResolvedValue(mockProduct);
-          const req = mockRequest({}, { productId });
+          const req = mockRequest({productId});
           const res = mockResponse();
       
           await deleteProductController(req, res);
@@ -208,7 +208,7 @@ import {
         it('should handle error when deleting a product', async () => {
           const productId = 1;
           deleteProduct.mockRejectedValue(mockError);
-          const req = mockRequest({}, { productId });
+          const req = mockRequest({productId});
           const res = mockResponse();
       
           await deleteProductController(req, res);

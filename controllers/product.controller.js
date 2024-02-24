@@ -19,7 +19,7 @@ import {
   
   export const findAllProductsByUserController = async (req, res) => {
     try {
-      const { userId } = req.params;
+      const { userId } = req.body;
       const products = await findAllProductsByUser(parseInt(userId));
       res.status(200).json(products);
     } catch (error) {
@@ -38,7 +38,7 @@ import {
   
   export const findProductByIdController = async (req, res) => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.body;
       const product = await findProductById(parseInt(productId));
       if (product) {
         res.status(200).json(product);
@@ -52,8 +52,7 @@ import {
   
   export const updateProductController = async (req, res) => {
     try {
-      const { productId } = req.params;
-      const { name, price } = req.body;
+      const { name, price, productId } = req.body;
       const updatedProduct = await updateProduct(parseInt(productId), name, price);
       res.status(200).json(updatedProduct);
     } catch (error) {
@@ -63,7 +62,7 @@ import {
   
   export const deleteProductController = async (req, res) => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.body;
       const deletedProduct = await deleteProduct(parseInt(productId));
       res.status(200).json(deletedProduct);
     } catch (error) {
