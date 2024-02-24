@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken } from '../middleware/verifyToken.js';
+import { verifyToken } from '../middleware/auth.js';
 import { 
     createProductController,
     findAllProductsByUserController,
@@ -20,151 +20,176 @@ export const productRouter = express.Router();
 
 /**
  * @swagger
- * /products/create:
+ * /product/create:
  *   post:
  *     summary: Create a new product
+ *     security:
+ *       - bearerAuth: []
  *     description: Create a new product with the provided data
  *     tags: [Products]
- *     parameters:
- *       - in: body
- *         name: product
- *         description: Data of the product to create
- *         required: true
- *         schema:
- *           $ref: '#/definitions/Product'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       201:
  *         description: Product created successfully
- *         schema:
- *           $ref: '#/definitions/Product'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  *       500:
  *         description: Error creating product
  */
-productRouter.post('/create', createProductController);
+productRouter.post('/create', verifyToken, createProductController);
 
 /**
  * @swagger
- * /products/findByUser:
+ * /product/findByUser:
  *   get:
  *     summary: Find all products by user ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Find all products associated with the specified user ID
  *     tags: [Products]
- *     parameters:
- *       - in: body
- *         name: userId
- *         description: ID of the user whose products to find
- *         required: true
- *         schema:
- *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Products found successfully
- *         schema:
- *           type: array
- *           items:
- *             $ref: '#/definitions/Product'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  *       500:
  *         description: Error finding products
  */
-productRouter.get('/findByUser', findAllProductsByUserController);
+productRouter.get('/findByUser', verifyToken, findAllProductsByUserController);
 
 /**
  * @swagger
- * /products/find:
+ * /product/find:
  *   get:
  *     summary: Find all products
+ *     security:
+ *       - bearerAuth: []
  *     description: Find all products in the system
  *     tags: [Products]
  *     responses:
  *       200:
  *         description: Products found successfully
- *         schema:
- *           type: array
- *           items:
- *             $ref: '#/definitions/Product'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  *       500:
  *         description: Error finding products
  */
-productRouter.get('/find', findAllProductsController);
+productRouter.get('/find', verifyToken, findAllProductsController);
 
 /**
  * @swagger
- * /products/findById:
+ * /product/findById:
  *   get:
  *     summary: Find a product by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Find a product by its ID
  *     tags: [Products]
- *     parameters:
- *       - in: body
- *         name: productId
- *         description: ID of the product to find
- *         required: true
- *         schema:
- *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Product found successfully
- *         schema:
- *           $ref: '#/definitions/Product'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  *       500:
  *         description: Error finding product
  */
-productRouter.get('/findById', findProductByIdController);
+productRouter.get('/findById', verifyToken, findProductByIdController);
 
 /**
  * @swagger
- * /products/update:
+ * /product/update:
  *   put:
  *     summary: Update a product by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Update a product's information by its ID
  *     tags: [Products]
- *     parameters:
- *       - in: body
- *         name: productId
- *         description: ID of the product to update
- *         required: true
- *         schema:
- *           type: integer
- *       - in: body
- *         name: product
- *         description: Data to update for the product
- *         required: true
- *         schema:
- *           $ref: '#/definitions/Product'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: integer
+ *               product:
+ *                 $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
  *         description: Product updated successfully
- *         schema:
- *           $ref: '#/definitions/Product'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  *       500:
  *         description: Error updating product
  */
-productRouter.put('/update', updateProductController);
+productRouter.put('/update', verifyToken, updateProductController);
 
 /**
  * @swagger
- * /products/delete:
+ * /product/delete:
  *   delete:
  *     summary: Delete a product by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Delete a product by its ID
  *     tags: [Products]
- *     parameters:
- *       - in: body
- *         name: productId
- *         description: ID of the product to delete
- *         required: true
- *         schema:
- *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Product deleted successfully
- *         schema:
- *           $ref: '#/definitions/Product'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
  *       500:
  *         description: Error deleting product
  */
-productRouter.delete('/delete', deleteProductController);
-
-export default productRouter;
+productRouter.delete('/delete', verifyToken, deleteProductController);

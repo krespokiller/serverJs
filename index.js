@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 3000
 
 // Iniciar el servidor
 app.listen(PORT, async () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`)
+  console.log(`Servidor corriendo en "http://localhost:${PORT}/api-docs"`)
   try {
     await prisma.$connect()
     console.log('Conexión a la base de datos establecida')

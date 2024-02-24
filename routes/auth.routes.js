@@ -15,20 +15,19 @@ export const authRouter = express.Router();
  * /auth/signup:
  *   post:
  *     summary: Sign up a new user
- *     description: Creates a new user account with the provided username and password
+ *     description: Creates a new user account with the provided email and password
  *     tags: [Authentication]
- *     parameters:
- *       - in: body
- *         name: user
- *         description: User credentials for signing up
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             username:
- *               type: string
- *             password:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       201:
  *         description: User signed up successfully
@@ -42,31 +41,30 @@ authRouter.post('/signup', singUpController);
  * /auth/login:
  *   post:
  *     summary: Log in user
- *     description: Authenticates a user with the provided username and password
+ *     description: Authenticates a user with the provided email and password
  *     tags: [Authentication]
- *     parameters:
- *       - in: body
- *         name: user
- *         description: User credentials for logging in
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             username:
- *               type: string
- *             password:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
  *         description: User logged in successfully
- *         schema:
- *           type: object
- *           properties:
- *             token:
- *               type: string
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
  *       500:
  *         description: Error in authentication
  */
 authRouter.post('/login', logInController);
-
-export default authRouter;

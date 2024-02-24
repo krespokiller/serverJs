@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-import { verifyToken } from '../verifyToken.js'
+import { verifyToken } from '../auth.js'
 
 jest.mock('jsonwebtoken', () => {
     return {
@@ -12,7 +12,7 @@ jest.mock('jsonwebtoken', () => {
 
 describe('Verify token', () => {
     it('calls verify when execute verifyToken middleware', () => {
-        const req = { headers: { authorization: 'someToken' } };
+        const req = { headers: { "authorization": 'Bearer someToken' } };
         const res = { status: jest.fn().mockReturnThis(), send: jest.fn() };
         const next = jest.fn();
 

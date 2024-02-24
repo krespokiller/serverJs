@@ -1,12 +1,13 @@
 import prisma from '../prisma/db.js'
 
 export const createUser = async (email, hashedPassword) => {
-  return await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       email,
       hashedPassword
     }
   })
+  return user
 }
 
 export const findUserByEmail = async (email) => {

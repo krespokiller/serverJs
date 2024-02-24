@@ -1,15 +1,16 @@
 import request from 'supertest';
 import { app } from '../../app';
+
 import { PrismaClient } from '@prisma/client'
 // Connect to the test database
 export const prisma = new PrismaClient();
-
+const mockedUser = { id: 1, email: 'test@example.com', password: '123TH1SISSUPOSEDTOBEAHASH123' };
 // Mock PrismaClient and its methods
 jest.mock('@prisma/client', () => {
-  const mockUserCreate = jest.fn();
-  const mockUserFindUnique = jest.fn();
-  const mockUserUpdate = jest.fn();
-  const mockUserDelete = jest.fn();
+  const mockUserCreate = jest.fn(()=>mockedUser);
+  const mockUserFindUnique = jest.fn(()=>mockedUser);
+  const mockUserUpdate = jest.fn(()=>mockedUser);
+  const mockUserDelete = jest.fn(()=>mockedUser);
 
   return {
     PrismaClient: jest.fn(() => ({
@@ -28,6 +29,14 @@ jest.mock('@prisma/client', () => {
   };
 });
 
+jest.mock('../../middleware/auth.js', () => {
+  return {
+    isAdmin: jest.fn(()=>true),
+    verifyToken: jest.fn((req, res, next)=>{
+      next()
+    })
+  }
+})
 // Close the database connection after all tests are run
 afterAll(async () => {
   // Disconnect Prisma Client

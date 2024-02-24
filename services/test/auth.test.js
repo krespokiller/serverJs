@@ -11,10 +11,10 @@ export const prisma = new PrismaClient();
 jest.mock('jsonwebtoken');
 
 jest.mock('bcryptjs', () => {
-  const mockhash = jest.fn(() => { return '123TH1SISSUPOSEDTOBEAHASH123' });
   return {
-    hash: mockhash,
-    compare: jest.fn((value1,value2)=>value1==='password123'&&value2==='123TH1SISSUPOSEDTOBEAHASH123')
+    genSaltSync: jest.fn(() => { return '$2a$10$eFdpf.C4gLQSlq3CALloT.' }),
+    hashSync: jest.fn(()=>'123TH1SISSUPOSEDTOBEAHASH123'),
+    compareSync: jest.fn((value1,value2)=>value1==='password123'&&value2==='123TH1SISSUPOSEDTOBEAHASH123')
   };
 });
 
@@ -53,7 +53,7 @@ describe('Authentication Services', () => {
       const user = await singUp(email, password);
   
       // Assert that createUser was called with the correct arguments
-      expect(createUser).toHaveBeenCalledWith({ email: email, password: '123TH1SISSUPOSEDTOBEAHASH123' });
+      expect(createUser).toHaveBeenCalledWith( email, '123TH1SISSUPOSEDTOBEAHASH123' );
       // Assert that the singUp function returned the mocked user object
       expect(user).toEqual({ id: 1, email: email, password: '123TH1SISSUPOSEDTOBEAHASH123' });
     });
@@ -75,7 +75,7 @@ describe('Authentication Services', () => {
 
       expect(result).toEqual(token);
       expect(findUserByEmail).toHaveBeenCalledWith(email);
-      expect(bcrypt.compare).toHaveBeenCalledWith(password, user.password);
+      expect(bcrypt.compareSync).toHaveBeenCalledWith(password, user.password);
       expect(jwt.sign).toHaveBeenCalledWith({ email: user.email }, undefined,{"expiresIn": "7d"});
     });
 
@@ -96,7 +96,7 @@ describe('Authentication Services', () => {
         password: '123TH1SISSUPOSEDTOBEAHASH123',
       };
       findUserByEmail.mockResolvedValue(user);
-      bcrypt.compare.mockResolvedValue(false);
+      bcrypt.compareSync.mockResolvedValue(false);
 
       await expect(logIn(email, password)).rejects.toThrow('Credenciales incorrectas');
     });

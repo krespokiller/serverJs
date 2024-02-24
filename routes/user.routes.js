@@ -1,12 +1,14 @@
-import express from 'express'
-import { verifyToken } from '../middleware/verifyToken.js'
+import express from 'express';
+import { verifyToken } from '../middleware/auth.js';
 import { 
     createUserController,
     findUserByEmailController, 
     updateUserByEmailController, 
     deleteUserByEmailController 
 } from '../controllers/user.controller.js';
+
 export const userRouter = express.Router();
+
 /**
  * @swagger
  * tags:
@@ -16,105 +18,117 @@ export const userRouter = express.Router();
 
 /**
  * @swagger
- * /users:
+ * /user/create:
  *   post:
- *     summary: Crea un nuevo usuario
- *     description: Crea un nuevo usuario con los datos proporcionados
+ *     summary: Create a new user
+ *     security:
+ *       - bearerAuth: []
+ *     description: Create a new user with the provided data
  *     tags: [Users]
- *     parameters:
- *       - in: body
- *         name: user
- *         description: Datos del usuario a crear
- *         required: true
- *         schema:
- *           $ref: '#/definitions/User'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: Usuario creado exitosamente
- *         schema:
- *           $ref: '#/definitions/User'
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  */
-userRouter.post('/create', createUserController, verifyToken);
+userRouter.post('/create', verifyToken, createUserController);
 
 /**
  * @swagger
- * /users/find:
+ * /user/find:
  *   post:
  *     summary: Find a user by email
+ *     security:
+ *       - bearerAuth: []
  *     description: Finds a user by their email address
  *     tags: [Users]
- *     parameters:
- *       - in: body
- *         name: email
- *         description: Email of the user to find
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
  *     responses:
  *       200:
  *         description: User found successfully
- *         schema:
- *           $ref: '#/definitions/User'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Error finding user
  */
-userRouter.get('/find', findUserByEmailController, verifyToken);
+userRouter.get('/find', verifyToken, findUserByEmailController);
 
 /**
  * @swagger
- * /users/update:
+ * /user/update:
  *   put:
  *     summary: Update a user by email
+ *     security:
+ *       - bearerAuth: []
  *     description: Updates a user's information by their email address
  *     tags: [Users]
- *     parameters:
- *       - in: body
- *         name: user
- *         description: Data to update for the user
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
- *             data:
- *               type: object
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               data:
+ *                 type: object
  *     responses:
  *       200:
  *         description: User updated successfully
- *         schema:
- *           $ref: '#/definitions/User'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Error updating user
  */
-userRouter.put('/update', updateUserByEmailController, verifyToken);
+userRouter.put('/update', verifyToken, updateUserByEmailController);
 
 /**
  * @swagger
- * /users/delete:
+ * /user/delete:
  *   delete:
  *     summary: Delete a user by email
+ *     security:
+ *       - bearerAuth: []
  *     description: Deletes a user by their email address
  *     tags: [Users]
- *     parameters:
- *       - in: body
- *         name: email
- *         description: Email of the user to delete
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
  *     responses:
  *       200:
  *         description: User deleted successfully
- *         schema:
- *           $ref: '#/definitions/User'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Error deleting user
  */
-userRouter.delete('/delete', deleteUserByEmailController, verifyToken);
+userRouter.delete('/delete', verifyToken, deleteUserByEmailController);

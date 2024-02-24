@@ -35,6 +35,14 @@ jest.mock('@prisma/client', () => {
   };
 });
 
+jest.mock('../../middleware/auth.js', () => {
+  return {
+    isAdmin: jest.fn(()=>true),
+    verifyToken: jest.fn((req, res, next)=>{
+      next()
+    })
+  }
+})
 // Mocked product data for testing
 const mockProduct = {
 id: 1,

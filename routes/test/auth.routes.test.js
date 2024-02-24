@@ -24,9 +24,10 @@ jest.mock('@prisma/client', () => {
 });
 
 jest.mock('bcryptjs', () => {
-  const mockhash = jest.fn(() => { return '123TH1SISSUPOSEDTOBEAHASH123' });
   return {
-    hash: mockhash,
+    genSaltSync: jest.fn(() => { return '$2a$10$eFdpf.C4gLQSlq3CALloT.' }),
+    hashSync: jest.fn(()=>'123TH1SISSUPOSEDTOBEAHASH123'),
+    compareSync: jest.fn((value1,value2)=>value1==='password123'&&value2==='123TH1SISSUPOSEDTOBEAHASH123')
   };
 });
 

@@ -15,7 +15,8 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       email: 'admin@david.com',
-      hashedPassword: 'hashed'
+      hashedPassword: '$2a$10$lnD9Au.V0uu51o/tow68GejLzUiuoNlQPE.SumKzsySFQltnHThha',
+      role: "ADMIN"
     }
   });
 
@@ -24,7 +25,9 @@ async function main() {
   const vendor = await prisma.user.create({
     data: {
       email: 'vendor@david.com',
-      hashedPassword: 'hashed'
+      hashedPassword: '$2a$10$lnD9Au.V0uu51o/tow68GejLzUiuoNlQPE.SumKzsySFQltnHThha',
+      role: "VENDOR"
+
     }
   });
 
@@ -33,7 +36,8 @@ async function main() {
   const vendor2 = await prisma.user.create({
     data: {
       email: 'vendor@david2.com',
-      hashedPassword: 'hashed'
+      hashedPassword: '$2a$10$lnD9Au.V0uu51o/tow68GejLzUiuoNlQPE.SumKzsySFQltnHThha',
+      role: "VENDOR"
     }
   });
 
