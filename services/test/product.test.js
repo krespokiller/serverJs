@@ -59,7 +59,6 @@ describe('Product', () => {
     describe('Create Product', () => {
         it('create a product', async () => {
           const product = await createProduct('Test Product', 10.99, 1);
-          console.log(product)
           expect(product).toHaveProperty('id');
           expect(product.name).toBe('Test Product');
           expect(product.price).toBe(10.99);
