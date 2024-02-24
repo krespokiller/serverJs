@@ -9,7 +9,7 @@ import {
 
   import { isAdmin } from '../middleware/auth.js'
   
-  export const createProductController = async (req, res, next) => {
+  export const createProductController = async (req, res) => {
     try {
       const { name, price, userId } = req.body;
 
@@ -18,10 +18,10 @@ import {
     } catch (error) {
       res.status(500).send("Error creating product");
     }
-    next()
+    
   }
   
-  export const findAllProductsByUserController = async (req, res, next) => {
+  export const findAllProductsByUserController = async (req, res) => {
     try {
       const { userId } = req.body;
       const products = await findAllProductsByUser(parseInt(userId));
@@ -29,10 +29,10 @@ import {
     } catch (error) {
       res.status(500).send("Error finding products by user");
     }
-    next()
+    
   }
   
-  export const findAllProductsController = async (req, res, next) => {
+  export const findAllProductsController = async (req, res) => {
     try {
       if (isAdmin(req.user)) {
         const products = await findAllProducts();
@@ -43,10 +43,10 @@ import {
     } catch (error) {
       res.status(500).send("Error finding all products");
     }
-    next()
+    
   }
   
-  export const findProductByIdController = async (req, res, next) => {
+  export const findProductByIdController = async (req, res) => {
     try {
       const { productId } = req.body;
       const product = await findProductById(parseInt(productId));
@@ -58,10 +58,10 @@ import {
     } catch (error) {
       res.status(500).send("Error finding product by ID");
     }
-    next()
+    
   }
   
-  export const updateProductController = async (req, res, next) => {
+  export const updateProductController = async (req, res) => {
     try {
       const { name, price, productId } = req.body;
       const updatedProduct = await updateProduct(parseInt(productId), name, price);
@@ -69,10 +69,10 @@ import {
     } catch (error) {
       res.status(500).send("Error updating product");
     }
-    next()
+    
   }
   
-  export const deleteProductController = async (req, res, next) => {
+  export const deleteProductController = async (req, res) => {
     try {
       const { productId } = req.body;
       const deletedProduct = await deleteProduct(parseInt(productId));
@@ -80,6 +80,6 @@ import {
     } catch (error) {
       res.status(500).send("Error deleting product");
     }
-    next()
+    
   }
   

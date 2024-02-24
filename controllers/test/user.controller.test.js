@@ -37,6 +37,12 @@ import {
     updateUserByEmail: jest.fn(),
     deleteUserByEmail: jest.fn(),
   }));
+
+  jest.mock('../../middleware/auth.js', () => {
+    return {
+      isAdmin: jest.fn(()=>true),
+    }
+  })
   
   describe('User Controller Tests', () => {
     beforeEach(() => {

@@ -7,7 +7,7 @@ import {
 
 import { isAdmin } from '../middleware/auth.js'
 
-export const createUserController = async (req, res, next) => {
+export const createUserController = async (req, res) => {
   try {
     const user = await createUser(req.body.email, req.body.password)
     res.status(201).send({
@@ -17,10 +17,10 @@ export const createUserController = async (req, res, next) => {
   } catch (error) {
     res.status(500).send('Error al registrar el usuario')
   }
-  next()
+  
 }
 
-export const findUserByEmailController = async (req, res, next) => {
+export const findUserByEmailController = async (req, res) => {
   try {
     const user = await findUserByEmail(req.body.email)
     res.status(200).send({
@@ -30,10 +30,10 @@ export const findUserByEmailController = async (req, res, next) => {
   } catch (error) {
     res.status(500).send('Error al encontrar el usuario')
   }
-  next()
+  
 }
 
-export const updateUserByEmailController = async (req, res, next) => {
+export const updateUserByEmailController = async (req, res) => {
   try {
     const user = await updateUserByEmail(req.body.email, req.body.data)
     res.status(200).send({
@@ -43,10 +43,10 @@ export const updateUserByEmailController = async (req, res, next) => {
   } catch (error) {
     res.status(500).send('Error al actualizar el usuario')
   }
-  next()
+  
 }
 
-export const deleteUserByEmailController = async (req, res, next) => {
+export const deleteUserByEmailController = async (req, res) => {
   try {
     if (isAdmin(req.user)) {
       const user = await deleteUserByEmail(req.body.email)
@@ -60,5 +60,5 @@ export const deleteUserByEmailController = async (req, res, next) => {
   } catch (error) {
     res.status(500).send('Error al borrar el usuario')
   }
-  next()
+  
 }

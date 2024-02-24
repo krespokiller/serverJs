@@ -22,15 +22,17 @@ export const singUp = async (email, password) => {
 }
 
 export const logIn = async (email, password) => {
-
   const user = await findUserByEmail(email)
+
   if (!user) {
     throw new Error('No se encontró el usuario')
   }
 
   const isPasswordValid = await bcrypt.compareSync(password, user.hashedPassword)
+
   if (!isPasswordValid) {
     throw new Error('Credenciales incorrectas')
   }
+
   return jwt.sign({ email: user.email }, process.env.SECRET_KEY,{ expiresIn: '7d' })
 }

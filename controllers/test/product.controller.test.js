@@ -46,6 +46,12 @@ import {
     deleteProduct: jest.fn(),
   }));
   
+  jest.mock('../../middleware/auth.js', () => {
+    return {
+      isAdmin: jest.fn(()=>true),
+    }
+  })
+
   describe('Product Controller Tests', () => {
     beforeEach(() => {
       jest.clearAllMocks(); // Clear all mock calls before each test
@@ -54,7 +60,7 @@ import {
     describe('createProductController', () => {
       it('should create a new product successfully', async () => {
         createProduct.mockResolvedValue(mockProduct);
-        const req = mockRequest({ name: 'Sample Product', price: 10.99, userId: 1 });
+        const req = mockRequest({ name: 'Sample Product', price: 10.99, });
         const res = mockResponse();
   
         await createProductController(req, res);
@@ -65,7 +71,7 @@ import {
   
       it('should handle error when creating a new product', async () => {
         createProduct.mockRejectedValue(mockError);
-        const req = mockRequest({ name: 'Sample Product', price: 10.99, userId: 1 });
+        const req = mockRequest({ name: 'Sample Product', price: 10.99, });
         const res = mockResponse();
   
         await createProductController(req, res);
@@ -106,7 +112,7 @@ import {
         it('should find all products successfully', async () => {
           const mockProducts = [mockProduct, mockProduct]; // Mocked array of products
           findAllProducts.mockResolvedValue(mockProducts);
-          const req = mockRequest({});
+          const req = mockRequest({user:{role:"ADMIN"}});
           const res = mockResponse();
       
           await findAllProductsController(req, res);

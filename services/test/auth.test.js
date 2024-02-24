@@ -8,7 +8,11 @@ import { PrismaClient } from '@prisma/client'
 export const prisma = new PrismaClient();
 
 // Mocks
-jest.mock('jsonwebtoken');
+jest.mock('jsonwebtoken',()=>{
+  return{
+    sign: jest.fn(()=>'generatedToken')
+  }
+});
 
 jest.mock('bcryptjs', () => {
   return {
@@ -20,7 +24,7 @@ jest.mock('bcryptjs', () => {
 
 
 jest.mock('../user',() => {
-  const mockedUser = { id: 1, email: 'test@example.com', password: '123TH1SISSUPOSEDTOBEAHASH123' };
+  const mockedUser = { id: 1, email: 'test@example.com', hashedPassword: '123TH1SISSUPOSEDTOBEAHASH123' };
   return {
     createUser: jest.fn(()=>mockedUser),
     findUserByEmail: jest.fn(()=>mockedUser)
@@ -55,7 +59,7 @@ describe('Authentication Services', () => {
       // Assert that createUser was called with the correct arguments
       expect(createUser).toHaveBeenCalledWith( email, '123TH1SISSUPOSEDTOBEAHASH123' );
       // Assert that the singUp function returned the mocked user object
-      expect(user).toEqual({ id: 1, email: email, password: '123TH1SISSUPOSEDTOBEAHASH123' });
+      expect(user).toEqual({ id: 1, email: email, hashedPassword: '123TH1SISSUPOSEDTOBEAHASH123', token:'generatedToken' });
     });
   });
 
@@ -65,17 +69,15 @@ describe('Authentication Services', () => {
       const password = 'password123';
       const user = {
         email,
-        password: '123TH1SISSUPOSEDTOBEAHASH123',
+        hashedPassword: '123TH1SISSUPOSEDTOBEAHASH123',
       };
-      const token = 'generatedToken';
 
-      jwt.sign.mockReturnValue(token);
 
       const result = await logIn(email, password);
 
-      expect(result).toEqual(token);
+      expect(result).toEqual('generatedToken');
       expect(findUserByEmail).toHaveBeenCalledWith(email);
-      expect(bcrypt.compareSync).toHaveBeenCalledWith(password, user.password);
+      expect(bcrypt.compareSync).toHaveBeenCalledWith(password, user.hashedPassword);
       expect(jwt.sign).toHaveBeenCalledWith({ email: user.email }, undefined,{"expiresIn": "7d"});
     });
 
