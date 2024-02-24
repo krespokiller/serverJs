@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { PrismaClient } from '@prisma/client'
-
 // Connect to the test database
 export const prisma = new PrismaClient();
 
@@ -47,7 +46,7 @@ describe('User routes', () => {
         .post('/user/create')
         .send(payload)
         .expect(201)
-    })
+            })
   });
 
   describe('GET /user/find', () => {

@@ -1,4 +1,5 @@
 import express from 'express'
+import { verifyToken } from '../middleware/verifyToken.js'
 import { 
     createUserController,
     findUserByEmailController, 
@@ -33,7 +34,7 @@ export const userRouter = express.Router();
  *         schema:
  *           $ref: '#/definitions/User'
  */
-userRouter.post('/create', createUserController);
+userRouter.post('/create', createUserController, verifyToken);
 
 /**
  * @swagger
@@ -60,7 +61,7 @@ userRouter.post('/create', createUserController);
  *       500:
  *         description: Error finding user
  */
-userRouter.get('/find', findUserByEmailController);
+userRouter.get('/find', findUserByEmailController, verifyToken);
 
 /**
  * @swagger
@@ -89,7 +90,7 @@ userRouter.get('/find', findUserByEmailController);
  *       500:
  *         description: Error updating user
  */
-userRouter.put('/update', updateUserByEmailController);
+userRouter.put('/update', updateUserByEmailController, verifyToken);
 
 /**
  * @swagger
@@ -116,4 +117,4 @@ userRouter.put('/update', updateUserByEmailController);
  *       500:
  *         description: Error deleting user
  */
-userRouter.delete('/delete', deleteUserByEmailController);
+userRouter.delete('/delete', deleteUserByEmailController, verifyToken);
