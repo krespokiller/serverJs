@@ -53,6 +53,8 @@ describe('Authentication Services', () => {
     it('should create a new user with hashed password', async () => {
       const email = 'test@example.com';
       const password = 'password123';
+      findUserByEmail.mockResolvedValue(undefined); // Mocking that user already exists
+
       // Call the singUp function with the email and password
       const user = await singUp(email, password);
   
@@ -71,7 +73,7 @@ describe('Authentication Services', () => {
         email,
         hashedPassword: '123TH1SISSUPOSEDTOBEAHASH123',
       };
-
+      findUserByEmail.mockResolvedValue({ id: 1, ...user });
 
       const result = await logIn(email, password);
 
@@ -101,6 +103,15 @@ describe('Authentication Services', () => {
       bcrypt.compareSync.mockResolvedValue(false);
 
       await expect(logIn(email, password)).rejects.toThrow('Credenciales incorrectas');
+    });
+
+    it('should throw an error if user already exists', async () => {
+      const email = 'test@example.com';
+      const password = 'password123';
+      findUserByEmail.mockResolvedValue({ id: 1, email: email, hashedPassword: 'existingHashedPassword' }); // Mocking that user already exists
+  
+      // Call the singUp function with the email and password
+      await expect(singUp(email, password)).rejects.toThrow('User already exists');
     });
   });
 });

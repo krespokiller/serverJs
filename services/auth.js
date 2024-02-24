@@ -7,7 +7,12 @@ export const singUp = async (email, password) => {
   const salt = bcrypt.genSaltSync(10);
   // Store hash in your password DB.
   const hashedPassword = bcrypt.hashSync(password, salt);
+  //verify if user exists
+  const userexistance = await findUserByEmail(email)
 
+  if(userexistance){
+    throw new Error("User already exists")
+  }
   const user = await createUser(
     email,
     hashedPassword
