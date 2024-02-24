@@ -10,6 +10,7 @@ import {
     updateUserByEmail,
     deleteUserByEmail,
   } from '../../services/index.js';
+  import { isAdmin } from '../../middleware/auth.js';
   
   // Mocked request and response objects
   const mockRequest = (body) => ({ body });
@@ -133,28 +134,39 @@ import {
     describe('deleteUserByEmailController', () => {
       it('should delete a user by email successfully', async () => {
         deleteUserByEmail.mockResolvedValue(mockUser);
-        const req = mockRequest({ email: 'test@example.com' });
+        const req = mockRequest({ email: 'test@example.com', user: { isAdmin: true } });
         const res = mockResponse();
-  
+    
         await deleteUserByEmailController(req, res);
-  
+    
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith({
           ...mockUser,
           message: 'Usuario borrado correctamente',
         });
       });
-  
+    
       it('should handle error when deleting a user by email', async () => {
         deleteUserByEmail.mockRejectedValue(mockError);
-        const req = mockRequest({ email: 'test@example.com' });
+        const req = mockRequest({ email: 'test@example.com', user: { isAdmin: true } });
         const res = mockResponse();
-  
+    
         await deleteUserByEmailController(req, res);
-  
+    
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith('Error al borrar el usuario');
       });
+    
+      it('should handle case where user is not an admin', async () => {
+        const req = mockRequest({ email: 'test@example.com' })
+        const res = mockResponse();
+        isAdmin.mockReturnValue(false)
+        await deleteUserByEmailController(req, res);
+    
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.send).toHaveBeenCalledWith("Error you need to be an admin to do that");
+      });
     });
+    
   });
   
