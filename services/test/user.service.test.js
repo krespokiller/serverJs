@@ -1,4 +1,9 @@
-import { createUser, findUserByEmail, updateUserByEmail, deleteUserByEmail } from '../index'
+import { 
+  createUser, 
+  findUserByEmail, 
+  updateUserByEmail, 
+  deleteUserByEmail 
+} from '../index'
 import { PrismaClient } from '@prisma/client'
 
 // Connect to the test database
