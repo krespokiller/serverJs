@@ -39,5 +39,8 @@ export const logIn = async (email, password) => {
     throw new Error('Credenciales incorrectas')
   }
 
-  return jwt.sign({ email: user.email }, process.env.SECRET_KEY,{ expiresIn: '7d' })
+  return {
+    token:jwt.sign({ email: user.email }, process.env.SECRET_KEY,{ expiresIn: '7d' }),
+    ...user
+  }
 }

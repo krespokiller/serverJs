@@ -12,7 +12,7 @@ export const singUpController = async (req, res) => {
 export const logInController = async (req, res) => {
   try {
     const token = await logIn(req.body.email, req.body.password)
-    res.status(200).json({ token })
+    res.status(200).json({ ...token })
   } catch (error) {
     res.status(500).send('Error en la autenticación')
   }
