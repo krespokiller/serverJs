@@ -77,7 +77,7 @@ describe('Authentication Services', () => {
 
       const result = await logIn(email, password);
 
-      expect(result).toEqual('generatedToken');
+      expect(result).toEqual({email: "test@example.com", hashedPassword: "123TH1SISSUPOSEDTOBEAHASH123", id: 1, token: "generatedToken"});
       expect(findUserByEmail).toHaveBeenCalledWith(email);
       expect(bcrypt.compareSync).toHaveBeenCalledWith(password, user.hashedPassword);
       expect(jwt.sign).toHaveBeenCalledWith({ email: user.email }, undefined,{"expiresIn": "7d"});

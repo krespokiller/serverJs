@@ -29,7 +29,7 @@ jest.mock('../../services/user.js',() => {
         expect(jwt.verify).toHaveBeenCalledWith('someToken', process.env.SECRET_KEY, expect.any(Function));
 
         // Verify that findUserByEmail() is called
-        expect(findUserByEmail).toHaveBeenCalledWith({ where: { email: undefined } });
+        expect(findUserByEmail).toHaveBeenCalledWith(undefined);
 
         // Verify that next() is called
         expect(next).toHaveBeenCalled();

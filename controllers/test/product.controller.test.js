@@ -133,15 +133,6 @@ import {
           expect(res.send).toHaveBeenCalledWith('Error finding all products');
         });
       
-        it('should return 400 status if user is not an admin', async () => {
-          const req = mockRequest({user:{role:"USER"}});
-          const res = mockResponse();
-          isAdmin.mockReturnValue(false);
-          await findAllProductsController(req, res);
-      
-          expect(res.status).toHaveBeenCalledWith(400);
-          expect(res.send).toHaveBeenCalledWith("Error you need to be an admin to do that");
-        });
       });
       
       

@@ -55,14 +55,14 @@ describe('Authentication Controller Tests', () => {
   describe('logInController', () => {
     it('should return a token when logging in successfully', async () => {
       const mockUser = { username: 'testuser', password: 'testpassword' };
-      logIn.mockResolvedValue('fakeToken');
+      logIn.mockResolvedValue({token: 'fakeToken'});
       const req = mockRequest(mockUser);
       const res = mockResponse();
 
       await logInController(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ token: 'fakeToken' });
+      expect(res.json).toHaveBeenCalledWith({token: 'fakeToken'});
     });
 
     it('should handle error when login fails', async () => {
