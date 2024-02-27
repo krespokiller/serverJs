@@ -11,11 +11,7 @@ export const verifyToken = async (req,res,next) => {
         if (err) {
         return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
         }
-        req.user = await findUserByEmail({
-            where:{
-                email:decoded.email
-            }
-        })
+        req.user = await findUserByEmail(decoded.email)
         next();
     });
 }

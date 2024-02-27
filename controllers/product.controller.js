@@ -34,13 +34,10 @@ import {
   
   export const findAllProductsController = async (req, res) => {
     try {
-      if (isAdmin(req.user)) {
-        const products = await findAllProducts();
-        res.status(200).json(products);
-      }else{
-        res.status(400).send("Error you need to be an admin to do that");
-      }
+      const products = await findAllProducts();
+      res.status(200).json(products);
     } catch (error) {
+      console.log(error)
       res.status(500).send("Error finding all products");
     }
     

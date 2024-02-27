@@ -82,8 +82,6 @@ productRouter.get('/findByUser', verifyToken, findAllProductsByUserController);
  * /product/find:
  *   get:
  *     summary: Find all products
- *     security:
- *       - bearerAuth: []
  *     description: Find all products in the system
  *     tags: [Products]
  *     responses:
@@ -98,7 +96,7 @@ productRouter.get('/findByUser', verifyToken, findAllProductsByUserController);
  *       500:
  *         description: Error finding products
  */
-productRouter.get('/find', verifyToken, findAllProductsController);
+productRouter.get('/find', findAllProductsController);
 
 /**
  * @swagger
